@@ -1,6 +1,6 @@
 # FamilyDirectoryCardDAV
 
-### Example `/etc/nixos/config.nix` On VPS
+### Example `./private/config.nix`
 
 ```nix
 { config, ... }:
@@ -18,7 +18,7 @@
     username = "user";
     pubSshKey = "ssh-rsa AAAFFF user";
     sshPort = 22;
-    repo = "User/Repo";
+    githubUser = "User";
   };
 }
 ```
