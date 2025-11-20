@@ -10,7 +10,15 @@
 }:
 
 {
-  imports = [ ./private/hardware-configuration.nix ];
+  sops.defaultSopsFile = ./secrets.yaml;
+  sops.age.keyFile = "/var/lib/sops-nix/key.txt";
+
+  sops.secrets.github = {
+    key = "id_carddav_deploy";
+    owner = "root";
+    group = "root";
+    mode = "0400";
+  };
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub = {
@@ -82,7 +90,7 @@
   programs.ssh = {
     extraConfig = "
       Host github.com
-        IdentityFile /home/${config.iconfig.username}/id_carddav_deploy
+        IdentityFile ${config.sops.secrets.github.path}
         IdentitiesOnly yes
     ";
   };
