@@ -17,5 +17,7 @@ in
     pubSshKey = mkOption { type = types.str; };
     sshPort = mkOption { type = types.int; };
     githubUser = mkOption { type = types.str; };
+    acmeEmail = mkOption { type = types.str; };
+    virtualHosts = mkOption { type = types.listOf types.str; };
   };
 }

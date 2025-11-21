@@ -22,6 +22,7 @@
           ./iconfig.nix
           ./private/config.nix
           ./configuration.nix
+          ./carddav.nix
           sops-nix.nixosModules.sops
         ];
       };

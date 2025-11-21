@@ -53,9 +53,6 @@
     "2001:4860:4860::8888"
     "2001:4860:4860::8844"
   ];
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
 
   time.timeZone = "Etc/UTC";
 
@@ -106,6 +103,18 @@
     };
   };
 
+  # Open ports in the firewall.
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+    config.iconfig.sshPort
+  ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nix.settings.auto-optimise-store = true;
   nix.gc = {
     automatic = true;

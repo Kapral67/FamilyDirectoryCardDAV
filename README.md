@@ -19,6 +19,8 @@
     pubSshKey = "ssh-rsa AAAFFF user";
     sshPort = 22;
     githubUser = "User";
+    acmeEmail = "acme@example.com";
+    virtualHosts = [ "dav.example.com" ];
   };
 }
 ```

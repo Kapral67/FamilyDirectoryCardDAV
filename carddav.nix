@@ -1,0 +1,26 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+{
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = config.iconfig.acmeEmail;
+  };
+
+  services.nginx = {
+    enable = true;
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    virtualHosts = lib.genAttrs config.iconfig.virtualHosts (host: {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        return = "418 'I am a teapot!'";
+      };
+    });
+  };
+}
