@@ -82,7 +82,7 @@
   ];
 
   environment.shellAliases = {
-    rebuild = "sudo nixos-rebuild switch --flake 'git+ssh://git@github.com/${config.iconfig.githubUser}/FamilyDirectoryCardDAV?submodules=1#nixos'";
+    rebuild = "sudo nixos-rebuild switch --flake 'git+ssh://git@github.com/${config.iconfig.githubUser}/FamilyDirectoryCardDAV?submodules=1#nixos' --refresh";
   };
 
   programs.ssh = {
