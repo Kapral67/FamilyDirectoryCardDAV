@@ -19,7 +19,7 @@
       enableACME = true;
       forceSSL = true;
       locations."/" = {
-        return = "418 'I am a teapot!'";
+        return = "200 'OK!'";
       };
     });
   };

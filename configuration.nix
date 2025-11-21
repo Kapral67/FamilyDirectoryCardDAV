@@ -78,6 +78,7 @@
   environment.systemPackages = with pkgs; [
     vim
     git
+    btop # optional for system monitoring
   ];
 
   environment.shellAliases = {
