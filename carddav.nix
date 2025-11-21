@@ -19,7 +19,10 @@
       enableACME = true;
       forceSSL = true;
       locations."/" = {
-        return = "200 'OK!'";
+        return = "200 '<html><body>It works</body></html>'";
+        extraConfig = ''
+          default_type text/html;
+        '';
       };
     });
   };

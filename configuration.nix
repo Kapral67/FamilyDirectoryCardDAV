@@ -86,11 +86,11 @@
   };
 
   programs.ssh = {
-    extraConfig = "
+    extraConfig = ''
       Host github.com
         IdentityFile ${config.sops.secrets.github.path}
         IdentitiesOnly yes
-    ";
+    '';
   };
 
   services.openssh = {
