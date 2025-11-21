@@ -18,6 +18,9 @@
     virtualHosts = lib.genAttrs config.iconfig.virtualHosts (host: {
       enableACME = true;
       forceSSL = true;
+      locations."= /.well-known/carddav" = {
+        return = "301 /";
+      };
       locations."/" = {
         return = "200 '<html><body>It works</body></html>'";
         extraConfig = ''
