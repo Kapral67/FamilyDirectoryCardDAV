@@ -33,7 +33,7 @@ in
     recommendedTlsSettings = true;
     recommendedOptimisation = true;
     recommendedProxySettings = true;
-    virtualHosts = lib.mapAttrs (host apiEndpoint: {
+    virtualHosts = lib.mapAttrs (host: apiEndpoint: {
       enableACME = true;
       forceSSL = true;
       locations."= /.well-known/carddav" = {
