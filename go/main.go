@@ -103,6 +103,11 @@ func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client) {
 	// Case 1: API Gateway status != 200 → proxy as-is
 	if upResp.StatusCode != http.StatusOK {
 		copyHeadersExcludingHopByHop(w.Header(), upResp.Header)
+
+		if upResp.StatusCode == http.StatusUnauthorized {
+			w.Header().Set("WWW-Authenticate", `Basic realm="CardDAV"`)
+		}
+
 		w.WriteHeader(upResp.StatusCode)
 		_, _ = io.Copy(w, upResp.Body)
 		return
@@ -135,6 +140,10 @@ func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client) {
 			}
 		}
 		w.Header().Set(k, v)
+	}
+
+	if upJSON.Status == http.StatusUnauthorized {
+		w.Header().Set("WWW-Authenticate", `Basic realm="CardDAV"`)
 	}
 
 	w.WriteHeader(upJSON.Status)
