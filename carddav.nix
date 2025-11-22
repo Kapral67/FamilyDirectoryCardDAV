@@ -33,7 +33,7 @@ in
     recommendedTlsSettings = true;
     recommendedOptimisation = true;
     recommendedProxySettings = true;
-    virtualHosts = lib.genAttrs config.iconfig.virtualHosts (host: {
+    virtualHosts = lib.mapAttrs (host apiEndpoint: {
       enableACME = true;
       forceSSL = true;
       locations."= /.well-known/carddav" = {
@@ -43,9 +43,10 @@ in
         proxyPass = "http://unix:/run/carddav/proxy.sock:";
         extraConfig = ''
           proxy_request_buffering off;
+          proxy_set_header X-Api-Endpoint ${apiEndpoint};
         '';
       };
-    });
+    }) config.iconfig.virtualHosts;
   };
 
   systemd.services.carddav-proxy = {

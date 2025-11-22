@@ -20,7 +20,12 @@
     sshPort = 22;
     githubUser = "User";
     acmeEmail = "acme@example.com";
-    virtualHosts = [ "dav.example.com" ];
+    virtualHosts = {
+      "dav.example.com" = "api.example.com/carddav";
+    };
+    proxyUrl = "https://static.example.com/proxy.exe";
+    proxySha256 = "sha256-AAA/FFF/EEE=";
+    proxyVersion = "0.1.0";
   };
 }
 ```

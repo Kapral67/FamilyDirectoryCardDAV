@@ -25,14 +25,9 @@ type UpstreamResponse struct {
 }
 
 func main() {
-	apiEndpoint := os.Getenv("API_ENDPOINT")
-	if apiEndpoint == "" {
-		log.Fatal("API_ENDPOINT env var is required")
-	}
-
 	sock := "/run/carddav/proxy.sock"
-
 	_ = os.Remove(sock)
+
 	ln, err := net.Listen("unix", sock)
 	if err != nil {
 		log.Fatalf("listen sock: %v", err)
@@ -43,13 +38,13 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		handleProxy(w, r, client, "https://"+apiEndpoint)
+		handleProxy(w, r, client)
 	})
 
 	log.Fatal(http.Serve(ln, nil))
 }
 
-func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client, upstream string) {
+func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client) {
 	isHead := r.Method == http.MethodHead
 
 	bodyBytes, err := io.ReadAll(r.Body)
@@ -66,6 +61,13 @@ func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client, up
 		}
 	}
 
+	apiEndpoint := r.Header.Get("X-Api-Endpoint")
+	if apiEndpoint == "" {
+		http.Error(w, "No Upstream", http.StatusBadGateway)
+		return
+	}
+	delete(headers, "X-Api-Endpoint")
+
 	upReq := UpstreamRequest{
 		Method:  r.Method,
 		Path:    r.URL.Path,
@@ -79,6 +81,7 @@ func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client, up
 		return
 	}
 
+	upstream := "https://" + apiEndpoint
 	upHTTPReq, err := http.NewRequest("POST", upstream, bytes.NewReader(payload))
 	if err != nil {
 		http.Error(w, "failed to build upstream request", http.StatusBadGateway)
