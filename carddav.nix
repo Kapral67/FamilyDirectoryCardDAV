@@ -50,7 +50,7 @@ in
 
   systemd.services.carddav-proxy = {
     description = "Go CardDAV proxy";
-    wantedBy = [ "multi-user-target" ];
+    wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
 
     serviceConfig = {
