@@ -45,8 +45,6 @@ func main() {
 }
 
 func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client) {
-	isHead := r.Method == http.MethodHead
-
 	bodyBytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "failed to read request body", http.StatusBadGateway)
@@ -132,12 +130,6 @@ func handleProxy(w http.ResponseWriter, r *http.Request, client *http.Client) {
 		switch ck {
 		case "Connection", "Keep-Alive", "Proxy-Authenticate", "Proxy-Authorization", "Te", "Trailer", "Transfer-Encoding", "Upgrade":
 			continue
-		case "Content-Length":
-			// For HEAD, we want to preserve upstream Content-Length.
-			// For others, let Go compute it from the body we write.
-			if !isHead {
-				continue
-			}
 		}
 		w.Header().Set(k, v)
 	}
