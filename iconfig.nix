@@ -19,5 +19,8 @@ in
     githubUser = mkOption { type = types.str; };
     acmeEmail = mkOption { type = types.str; };
     virtualHosts = mkOption { type = types.listOf types.str; };
+    proxyUrl = mkOption { type = types.str; };
+    proxySha256 = mkOption { type = types.str; };
+    proxyVersion = mkOption { type = types.str; };
   };
 }

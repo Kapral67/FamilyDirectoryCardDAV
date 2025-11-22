@@ -5,6 +5,23 @@
   ...
 }:
 
+let
+  carddavProxy = pkgs.stdenv.mkDerivation {
+    pname = "proxy";
+    version = config.iconfig.proxyVersion;
+
+    src = pkgs.fetchurl {
+      url = config.iconfig.proxyUrl;
+      sha256 = config.iconfig.proxySha256;
+    };
+
+    phases = [ "installPhase" ];
+    installPhase = ''
+      mkdir -p $out/bin
+      install -m755 $src $out/bin/proxy
+    '';
+  };
+in
 {
   security.acme = {
     acceptTerms = true;
@@ -15,6 +32,7 @@
     enable = true;
     recommendedTlsSettings = true;
     recommendedOptimisation = true;
+    recommendedProxySettings = true;
     virtualHosts = lib.genAttrs config.iconfig.virtualHosts (host: {
       enableACME = true;
       forceSSL = true;
@@ -22,11 +40,25 @@
         return = "301 /";
       };
       locations."/" = {
-        return = "200 '<html><body>It works</body></html>'";
+        proxyPass = "http://unix:/run/carddav/proxy.sock:";
         extraConfig = ''
-          default_type text/html;
+          proxy_request_buffering off;
         '';
       };
     });
+  };
+
+  systemd.services.carddav-proxy = {
+    description = "Go CardDAV proxy";
+    wantedBy = [ "multi-user-target" ];
+    after = [ "network.target" ];
+
+    serviceConfig = {
+      ExecStart = "${carddavProxy}/bin/proxy";
+      User = "nginx";
+      Group = "nginx";
+      RuntimeDirectory = "carddav";
+      RuntimeDirectoryMode = "0750";
+    };
   };
 }
