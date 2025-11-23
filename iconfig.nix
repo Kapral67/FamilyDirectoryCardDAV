@@ -18,7 +18,25 @@ in
     sshPort = mkOption { type = types.int; };
     githubUser = mkOption { type = types.str; };
     acmeEmail = mkOption { type = types.str; };
-    virtualHosts = mkOption { type = types.attrsOf types.str; };
+    virtualHosts = mkOption {
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            options = {
+              apiEndpoint = mkOption { type = types.str; };
+              iosDavDescription = mkOption { type = types.str; };
+              iosDotMobileConfigName = mkOption { type = types.str; };
+              iosProfileDisplayName = mkOption { type = types.str; };
+              iosDavUUID = mkOption { type = types.str; };
+              iosDavPkg = mkOption { type = types.str; };
+              iosProfileUUID = mkOption { type = types.str; };
+              iosProfilePkg = mkOption { type = types.str; };
+            };
+          }
+        )
+      );
+    };
     proxyUrl = mkOption { type = types.str; };
     proxySha256 = mkOption { type = types.str; };
     proxyVersion = mkOption { type = types.str; };

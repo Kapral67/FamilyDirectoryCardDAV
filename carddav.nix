@@ -33,17 +33,24 @@ in
     recommendedTlsSettings = true;
     recommendedOptimisation = true;
     recommendedProxySettings = true;
-    virtualHosts = lib.mapAttrs (host: apiEndpoint: {
+    virtualHosts = lib.mapAttrs (host: vhostCfg: {
       enableACME = true;
       forceSSL = true;
       locations."= /.well-known/carddav" = {
         return = "301 /";
       };
+      locations."= /ios" = {
+        alias = config.ios.profiles.${host};
+        extraConfig = ''
+          default_type application/x-apple-aspen-config;
+          add_header Content-Disposition 'attachment; filename="${vhostCfg.iosDotMobileConfigName}.mobileconfig"';
+        '';
+      };
       locations."/" = {
         proxyPass = "http://unix:/run/carddav/proxy.sock:";
         extraConfig = ''
           proxy_request_buffering off;
-          proxy_set_header X-Api-Endpoint ${apiEndpoint};
+          proxy_set_header X-Api-Endpoint ${vhostCfg.apiEndpoint};
         '';
       };
     }) config.iconfig.virtualHosts;

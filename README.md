@@ -21,7 +21,16 @@
     githubUser = "User";
     acmeEmail = "acme@example.com";
     virtualHosts = {
-      "dav.example.com" = "api.example.com/carddav";
+      "dav.example.com" = {
+        apiEndpoint = "api.example.com/carddav";
+        iosDavDescription = "Example Family Directory";
+        iosDotMobileConfigName = "exampleFamilyDirectory";
+        iosProfileDisplayName = "Example CardDAV";
+        iosDavUUID = "cac2088e-b474-4f60-937a-bfffb6d29f79";
+        iosDavPkg = "com.example.carddav";
+        iosProfileUUID = "ffe1511e-313b-4087-9de4-af09fe05ba25";
+        iosProfilePkg = "com.example.mobileconfig";
+      };
     };
     proxyUrl = "https://static.example.com/proxy.exe";
     proxySha256 = "sha256-AAA/FFF/EEE=";
