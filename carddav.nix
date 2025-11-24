@@ -39,7 +39,7 @@ in
       locations."= /.well-known/carddav" = {
         return = "301 /";
       };
-      locations."= /ios" = {
+      locations."= /apple" = {
         alias = config.ios.profiles.${host};
         extraConfig = ''
           default_type application/x-apple-aspen-config;
