@@ -78,7 +78,7 @@
   environment.systemPackages = with pkgs; [
     vim
     git
-    btop # optional for system monitoring
+    sysstat
   ];
 
   environment.shellAliases = {
@@ -102,6 +102,10 @@
       PermitRootLogin = "no";
       AllowUsers = [ config.iconfig.username ];
     };
+  };
+
+  services.sysstat = {
+    enable = true;
   };
 
   # Open ports in the firewall.
