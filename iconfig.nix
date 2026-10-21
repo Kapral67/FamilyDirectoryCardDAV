@@ -32,6 +32,10 @@ in
               iosDavPkg = mkOption { type = types.str; };
               iosProfileUUID = mkOption { type = types.str; };
               iosProfilePkg = mkOption { type = types.str; };
+              responseHeaders = mkOption {
+                type = types.attrsOf types.str;
+                default = { };
+              };
             };
           }
         )

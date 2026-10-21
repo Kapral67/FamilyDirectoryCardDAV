@@ -30,6 +30,9 @@
         iosDavPkg = "com.example.carddav";
         iosProfileUUID = "ffe1511e-313b-4087-9de4-af09fe05ba25";
         iosProfilePkg = "com.example.mobileconfig";
+        responseHeaders = {
+          "X-Static" = "foobar";
+        };
       };
     };
     proxyUrl = "https://static.example.com/proxy.exe";

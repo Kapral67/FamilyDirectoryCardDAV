@@ -21,6 +21,12 @@ let
       install -m755 $src $out/bin/proxy
     '';
   };
+
+  addResponseHeaders =
+    headers:
+    lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: value: ''add_header ${name} "${value}" always;'') headers
+    );
 in
 {
   security.acme = {
@@ -51,6 +57,7 @@ in
         extraConfig = ''
           proxy_request_buffering off;
           proxy_set_header X-Api-Endpoint ${vhostCfg.apiEndpoint};
+          ${addResponseHeaders vhostCfg.responseHeaders}
         '';
       };
     }) config.iconfig.virtualHosts;
